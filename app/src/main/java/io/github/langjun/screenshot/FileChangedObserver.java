@@ -1,6 +1,7 @@
 package io.github.langjun.screenshot;
 
 import android.net.Uri;
+import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
 
@@ -12,25 +13,30 @@ import java.io.File;
  */
 public class FileChangedObserver extends FileObserver {
 	private final String TAG = "FileChangedObserver";
+	private final String PATH = Environment.getExternalStorageDirectory().getPath();
+
+	private String mFilePath;
 
 	private IOnFileChangedListener mListener;
 
 	public FileChangedObserver(String path) {
 		super(path);
+		this.mFilePath = path;
 	}
 
 	public FileChangedObserver(String path, int mask) {
 		super(path, mask);
+		this.mFilePath = path;
 	}
 
 	@Override
 	public void onEvent(int event, String path) {
-
+		// Log.i(TAG, mFilePath + path);
 		if (path == null) {
 			return;
 		}
 
-		File file = new File(path);
+		File file = new File(mFilePath + path);
 		Uri uri = null;
 
 		try {
